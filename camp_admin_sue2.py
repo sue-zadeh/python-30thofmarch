@@ -74,6 +74,19 @@ def list_customers():
 
 def list_campsites():
     # List the ID, name, occupancy
+    print("\n=== Camp Sites ===")
+    print("\nUnpowered Sites:")
+    # max occupancy for unpowered sites
+    print("{:<10} |{:<15}" .format("Site ID", "Max Occupancy"))
+    for site in UNPS:
+      print("{:<10} |{:<15}" .format(site[0], site[1])) 
+    print("\nPowered Sites:") 
+    # max occupancy for powered sites 
+    print("{:<10} |{:<15}" .format("Site ID", "Max Occupancy"))
+    for site in UNPS:
+      print("{:<10} |{:<15}" .format(site[0], site[1])) 
+    
+    
     pass  # REMOVE this line once you have some function code (a function must have one line of code, so this temporary line keeps Python happy so you can run the code)
 
 def list_campers_by_date():  
@@ -82,26 +95,55 @@ def list_campers_by_date():
 
 def add_customer():
     # Add a customer to the db_customers database, use the next_id to get an id for the customer.
-    new_id = next_id(db_customers)
+    new_id = next_id(db_customers) 
     
     print("\n=== Add New Customer ===")
     
     # Remember to add all required dictionaries.
     name = input("Enter customer's name: ")
-    phone = input("Enter customer's phone number: ")
+    phone = input("Enter customer's phne number: ")
     email = input("Enter customer's email address: ")
-
-
+    
     pass  # REMOVE this line once you have some function code (a function must have one line of code, so this temporary line keeps Python happy so you can run the code)
     db_customers[new_id] = {'name': name, 'phone': phone, 'email': email}
 
     print(f"Customer added with ID: {new_id}")
 
 def add_booking():
+    
     # Add a booking
+    print("\n=== Add Booking ===")
+   
     # Remember to validate customer ids and sites
+    customer_id = int(input("Enter customer ID: "))
+    if customer_id not in db_customers:
+       print("Customer ID not found.")
+       return
+  
+   # site type and validate
+    site_type = input("Enter site type (U for Unpowered, P for Powered): ").upper()
+    if site_type not in ['U', 'P']:
+      print("Invalid site type.")
+      return
+   
+    # avalable site based on types
+    if site_type == "U":
+       sites = UNPS
+    else:
+      sites = PS  
+      print('\nAvalable Sites:') 
+    for site in sites:  
+      print(f"Site ID: {site[0]}, Max Occupancy: {site[1]}")
+    
+    # site ID and validate
+    site_id = input("Enter site ID: ") 
+    if not any(site[0] == site_id for site in sites):
+      print("Invalid Site ID") 
+      return
+    
 
-    pass  # REMOVE this line once you have some function code (a function must have one line of code, so this temporary line keeps Python happy so you can run the code)
+
+      pass  # REMOVE this line once you have some function code (a function must have one line of code, so this temporary line keeps Python happy so you can run the code)
 
 
 
