@@ -146,7 +146,23 @@ def add_booking():
       start_date = datetime.datetime.strptime('Enter start date (YYYY-MM-DD): ')
     except ValueError: 
      print("Invalid date format")
-     
+     return
+   
+   #number of nights and validate
+    num_nights = int(input('Enter number of nights (1-5): '))
+    # between 1 and 5
+    if not 1 <= num_nights <= 5:
+      print('Invalid number of nights. please enter a value between 1-5')
+      return
+    
+   # add booking for each night
+    for i in range(num_nights):
+     booking_date = start_date + datetime.timedelta(days=i) 
+     if booking_date not in db_bookings:
+       db_bookings[booking_date] =[[], []]
+       booking_list_index = 0 if site_type == 'U' else 1
+       db_bookings[booking_date][booking_list_index].append((site_id, customer_id, num_nights))
+      print("Booking added Successfully")
      pass  # REMOVE this line once you have some function code (a function must have one line of code, so this temporary line keeps Python happy so you can run the code)
 
 
