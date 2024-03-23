@@ -87,11 +87,34 @@ def list_campsites():
       print("{:<10} |{:<15}" .format(site[0], site[1])) 
     
     
-    pass  # REMOVE this line once you have some function code (a function must have one line of code, so this temporary line keeps Python happy so you can run the code)
 
 def list_campers_by_date():  
     # List the Date, name, site, occupancy
-    pass  # REMOVE this line once you have some function code (a function must have one line of code, so this temporary line keeps Python happy so you can run the code)
+    print("\n=== List campers by date ===")
+    #date input and validate
+    date_input = input("Enter a date (YYYY-MM-DD): ")
+    try:
+      specific_day = datetime.datetime.strptime(date_input, "%Y-%m-%d").date()
+    except ValueError:
+      print("Invalid date format. Please enter date as YYYY-MM-DD")
+      return  
+    
+    # check the date is valid
+    if specific_day not in db_bookings:
+      print(f'No booking found for {specific_day}')
+      return
+    #booking for the specific day
+    bookings = db_bookings[specific_day]
+    unpowered_bookings = bookings[0]
+    powered_bookings = bookings[1]
+    
+    #displying the booking information
+    print(f'\nBookings for {specific_day}')
+    for booking in unpowered_bookings + powered_bookings:
+      site_id, customer_id, num_occupants =booking 
+      customer_name = db_customers[customer_id]["name"]
+      print(f"Site ID: {site_id}. Customer name: {customer_name}, Occupants: {num_occupants}")
+    
 
 def add_customer():
     # Add a customer to the db_customers database, use the next_id to get an id for the customer.
@@ -101,10 +124,9 @@ def add_customer():
     
     # Remember to add all required dictionaries.
     name = input("Enter customer's name: ")
-    phone = input("Enter customer's phne number: ")
+    phone = input("Enter customer's phone number: ")
     email = input("Enter customer's email address: ")
     
-    pass  # REMOVE this line once you have some function code (a function must have one line of code, so this temporary line keeps Python happy so you can run the code)
     db_customers[new_id] = {'name': name, 'phone': phone, 'email': email}
 
     print(f"Customer added with ID: {new_id}")
@@ -145,6 +167,7 @@ def add_booking():
     try:
       start_date = datetime.datetime.strptime(start_date_str, '%Y-%m-%d').date()
     except ValueError: 
+      
      print("Invalid date format")
      return
    
@@ -162,10 +185,8 @@ def add_booking():
        db_bookings[booking_date] =[[], []]
        booking_list_index = 0 if site_type == 'U' else 1
        db_bookings[booking_date][booking_list_index].append((site_id, customer_id, num_nights))
-       print("Booking added Successfully")
-     pass  # REMOVE this line once you have some function code (a function must have one line of code, so this temporary line keeps Python happy so you can run the code)
-
-
+    print("Booking added Successfully")
+      
 
 # function to display the menu
 def disp_menu():
