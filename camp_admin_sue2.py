@@ -187,6 +187,54 @@ def add_booking():
        db_bookings[booking_date][booking_list_index].append((site_id, customer_id, num_nights))
     print("Booking added Successfully")
       
+      
+# function to modify booking
+def modify_booking():
+  print("\n=== Modify Booking ===")
+  original_date = input("Enter original booking date (YYYY-MM-DD): ")
+  try:
+    original_date = datetime.datetime.strptime(original_date, "%Y-%m-%d").date()
+  except ValueError:
+    print("Invalid date format. Please enter date as YYYY-MM-DD") 
+    return
+  if original_date not in db_bookings:
+    print(f"No booking found for {original_date}")
+    return
+  
+  site_id = input("Enter the original site ID:").upper()
+  # to change the date and site id of the booking
+  new_date_input = input("Enter new booking date (YYYY-MM-DD): ")
+  try:
+    new_date_input = datetime.datetime.strptime(new_date_input, "%Y-%m-%d").date()
+  except ValueError:
+    print("Invalid date format. Please enter date as YYYY-MM-DD")
+    return
+  
+  new_site_id = input("Enter the new site ID:").upper()
+  # check booking validation and modifying the booking
+  booking_modified = False
+  for bookings in db_bookings[original_date]:
+    for i, booking in enumerate(bookings):
+      if booking[0] == site_id:
+        customer_id, occupants = booking[1], booking[2]
+        bookings.pop(i)  # remove the original booking
+        booking_modified = True
+        break
+      if booking_modified:
+        break
+      if not booking_modified:
+        print("Original booking not found")
+        return
+      
+      # add the new booking
+if new_date not in db_bookings:
+  db_bookings[new_date] = [[], []]
+  new_booking_list = db_bookings[new_date][0] if new_site_id.startswith('U') else  db_bookings[new_date][1]
+  new_booking_list.append((new_site_id, custom_id, occupants))
+  
+  print("Booking modified successfully")
+    
+  
 
 # function to display the menu
 def disp_menu():
@@ -196,6 +244,7 @@ def disp_menu():
     print(" 3 - List Campers (Specific Date")
     print(" 4 - Add Customer")
     print(" 5 - Add Booking")
+    print(" 6 - Modify Booking")
     print(" X - eXit (stops the program)")
 
 
