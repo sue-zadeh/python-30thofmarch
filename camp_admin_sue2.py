@@ -145,8 +145,9 @@ def add_booking():
     try:
       start_date = datetime.datetime.strptime('Enter start date (YYYY-MM-DD): ')
     except ValueError: 
-
-      pass  # REMOVE this line once you have some function code (a function must have one line of code, so this temporary line keeps Python happy so you can run the code)
+     print("Invalid date format")
+     
+     pass  # REMOVE this line once you have some function code (a function must have one line of code, so this temporary line keeps Python happy so you can run the code)
 
 
 
