@@ -162,7 +162,7 @@ def add_booking():
        db_bookings[booking_date] =[[], []]
        booking_list_index = 0 if site_type == 'U' else 1
        db_bookings[booking_date][booking_list_index].append((site_id, customer_id, num_nights))
-      print("Booking added Successfully")
+       print("Booking added Successfully")
      pass  # REMOVE this line once you have some function code (a function must have one line of code, so this temporary line keeps Python happy so you can run the code)
 
 
