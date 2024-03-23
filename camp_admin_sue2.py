@@ -143,7 +143,7 @@ def add_booking():
     #start date and validate
     start_date_str = input("Enter start date (YYYY-MM-DD): ")
     try:
-      start_date = datetime.datetime.strptime('Enter start date (YYYY-MM-DD): ')
+      start_date = datetime.datetime.strptime(start_date_str, '%Y-%m-%d').date()
     except ValueError: 
      print("Invalid date format")
      return
