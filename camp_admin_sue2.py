@@ -140,8 +140,11 @@ def add_booking():
     if not any(site[0] == site_id for site in sites):
       print("Invalid Site ID") 
       return
-    
-
+    #start date and validate
+    start_date_str = input("Enter start date (YYYY-MM-DD): ")
+    try:
+      start_date = datetime.datetime.strptime('Enter start date (YYYY-MM-DD): ')
+    except ValueError: 
 
       pass  # REMOVE this line once you have some function code (a function must have one line of code, so this temporary line keeps Python happy so you can run the code)
 
