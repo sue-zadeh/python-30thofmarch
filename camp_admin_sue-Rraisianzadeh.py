@@ -122,70 +122,88 @@ def add_customer():
     
     print("\n=== Add New Customer ===")
     
-    # Remember to add all required dictionaries.
-    name = input("Enter customer's name: ")
-    phone = input("Enter customer's phone number: ")
-    email = input("Enter customer's email address: ")
-    
-    db_customers[new_id] = {'name': name, 'phone': phone, 'email': email}
+    # Get customer's name with minimum length and containing spaces check
+    name = ""
+    while len(name) < 2 or " " not in name:
+      name = input("Enter customer's full name (at least 2 characters with spaces): ")
+      if len(name) <2 or " " not in name:
+       print("Invalid input. Please enter a full name with spaces: ")
+        
+        # Get customer's phone, ensuring it is non-empty
+    phone = ""
+    while len(phone) < 5 or not phone.isdigit():
+        phone = input("Enter customer's phone number (at least 5 digits): ")
+        if len(phone) < 5 or not phone.isdigit():
+            print("Invalid input. Phone number must be at least 5 digits and contain only numbers.")
 
+        
+        # Get and validate customer's email address
+        email = ""
+    while "@" not in email or "." not in email or " " in email or len(email) < 5:
+     email = input("Enter customer's email address: ")
+     if "@" not in email or "." not in email or " " in email or len(email) < 5:email = input("Invalid email. Eplease enter the currect email address: ")
+     print("Invalid input. Please enter a valid email address.")
+
+    db_customers[new_id] = {'name': name, 'phone': phone, 'email': email}
     print(f"Customer added with ID: {new_id}")
 
 def add_booking():
-    
-    # Add a booking
     print("\n=== Add Booking ===")
-   
-    # Remember to validate customer ids and sites
-    customer_id = int(input("Enter customer ID: "))
-    if customer_id not in db_customers:
-       print("Customer ID not found.")
-       return
-  
-   # site type and validate
-    site_type = input("Enter site type (U for Unpowered, P for Powered): ").upper()
-    if site_type not in ['U', 'P']:
-      print("Invalid site type.")
-      return
-   
-    # avalable site based on types
-    if site_type == "U":
-       sites = UNPS
-    else:
-      sites = PS  
-      print('\nAvalable Sites:') 
-    for site in sites:  
-      print(f"Site ID: {site[0]}, Max Occupancy: {site[1]}")
     
-    # site ID and validate
-    site_id = input("Enter site ID: ") 
-    if not any(site[0] == site_id for site in sites):
-      print("Invalid Site ID") 
-      return
-    #start date and validate
-    start_date_str = input("Enter start date (YYYY-MM-DD): ")
-    try:
-      start_date = datetime.datetime.strptime(start_date_str, '%Y-%m-%d').date()
-    except ValueError: 
-      
-     print("Invalid date format")
-     return
-   
-   #number of nights and validate
-    num_nights = int(input('Enter number of nights (1-5): '))
-    # between 1 and 5
-    if not 1 <= num_nights <= 5:
-      print('Invalid number of nights. please enter a value between 1-5')
-      return
+    customer_id = None
+    while customer_id is None:
+        customer_id_input = input("Enter customer ID: ")
+        if customer_id_input.isdigit():
+            customer_id = int(customer_id_input)
+            if customer_id not in db_customers:
+                print("Customer ID not found. Please try again.")
+                customer_id = None
+
+    site_type = None
+    while site_type not in ['U', 'P']:
+        site_type = input("Enter site type (U for Unpowered, P for Powered): ").upper()
+        if site_type not in ['U', 'P']:
+            print("Invalid site type. Please enter 'U' for Unpowered or 'P' for Powered.")
     
-   # add booking for each night
+    sites = UNPS if site_type == 'U' else PS
+    print('\nAvailable Sites:')
+    for site in sites:
+        print(f"Site ID: {site[0]}, Max Occupancy: {site[1]}")
+    
+    site_id = None
+    while site_id is None or not any(site[0] == site_id for site in sites):
+        site_id = input("Enter site ID: ")
+        if not any(site[0] == site_id for site in sites):
+            print("Invalid Site ID. Please try again.")
+            site_id = None
+
+    start_date = None
+    while start_date is None:
+        start_date_str = input("Enter start date (YYYY-MM-DD): ")
+        try:
+            start_date = datetime.datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        except ValueError:
+            print("Invalid date format, please enter date as YYYY-MM-DD.")
+    
+    num_nights = 0
+    while num_nights < 1 or num_nights > 5:
+        num_nights_str = input('Enter number of nights (1-5): ')
+        if num_nights_str.isdigit():
+            num_nights = int(num_nights_str)
+            if num_nights < 1 or num_nights > 5:
+                print("Invalid number of nights. Please enter a value between 1-5.")
+                num_nights = 0  # Reset to prompt again
+    
+    # Add booking for each night
     for i in range(num_nights):
-     booking_date = start_date + datetime.timedelta(days=i) 
-     if booking_date not in db_bookings:
-       db_bookings[booking_date] =[[], []]
-       booking_list_index = 0 if site_type == 'U' else 1
-       db_bookings[booking_date][booking_list_index].append((site_id, customer_id, num_nights))
+        booking_date = start_date + datetime.timedelta(days=i)
+        if booking_date not in db_bookings:
+            db_bookings[booking_date] = [[], []]
+        booking_list_index = 0 if site_type == 'U' else 1
+        db_bookings[booking_date][booking_list_index].append((site_id, customer_id, num_nights))
+    
     print("Booking added Successfully")
+
 
 # function to display the menu
 def disp_menu():
